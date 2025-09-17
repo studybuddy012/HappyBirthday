@@ -1,44 +1,382 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Happy Birthday ❤️</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;}
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: url("assets/2bg.jpg") no-repeat center center/cover ;
+      /* background-color: #ffb6c1; */
+      color: #fff;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    .container {
+      margin: 20px;
+      padding: 20px;
+      background: rgba(0,0,0,0.6);
+      border-radius: 15px;
+      box-shadow: 0 0 20px #ff69b4;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      color: #ffb6c1;
+      margin-bottom: 10px;
+    }
+
+    .message {
+      font-size: 1rem;
+      margin-bottom: 15px;
+    }
+
+    button {
+      background: #ff69b4;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 12px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 10px 0;
+      width: 100%;
+    }
+    button:hover {
+      background: #ff1493;
+    }
+
+    #overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.95);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+      z-index: 999;
+    }
+
+    .slideshow {
+      width: 90%;
+      max-width: 380px;
+      height: 380px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      margin-right: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+
+    .slide {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0; 
+      left: 0;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      object-fit: cover;
+    }
+    .slide.active {
+      opacity: 1;
+    }
+
+    .quote {
+      margin: 12px ;
+      margin-right: 25px;
+      font-size: 1rem;
+      color: #ffd1dc;
+      max-width: 90%;
+    }
+
+    .love-letter {
+      max-width: 90%;
+      background: rgba(255,182,193,0.12);
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 1rem;
+      display: none;
+      margin-top: 15px;
+      white-space: pre-wrap;
+      color: #fff6f9;
+      box-shadow: 0 8px 20px rgba(255,90,165,0.08);
+      margin-right: 25px;
+    }
+
+    #closeBtn {
+      position: absolute;
+      top: 10px; 
+      right: 40px;
+      background: crimson;
+      border: none;
+      color: #fff;
+      border-radius: 10px;
+      width: 35px; 
+      height: 30px;
+      font-size: 1.2rem;
+      z-index: 1000;
+      padding-top: 2px;
+      /* text-align: center; */
+      padding-left: 5px;
+    }
+    #heartButton {
+  display: block;
+  margin: 12px auto;
+  margin-left: 5px; /* center hoga */
+  width: 90%;        /* responsive width */
+  max-width: 380px;
+}
+
+
+    .small-note { font-size:0.9rem;color:#ffdbe9;margin-top:8px }
+    @media (min-width:480px){
+      .slideshow { max-width:420px; height:420px }
+      h1 { font-size:2rem }
+      body {background: url("assets/2bg.jpg") no-repeat center center/cover ;}
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container" role="main">
     <h1>🎉 Happy Birthday My Love ❤️ 🎉</h1>
-    <p class="message">On this special day, I just want to say...  
-       You are the most beautiful part of my life 💫</p>
-    
-    <button onclick="showSurprise()">Click for Surprise 🎁</button>
-    
-    <div id="surprise" class="hidden">
-      <!-- Slideshow -->
-      <div class="slideshow">
-        <img src="assets/1.jpg" class="slide active" alt="Special Photo 1">
-        <img src="assets/2.jpg" class="slide" alt="Special Photo 2">
-        <img src="assets/3.jpg" class="slide" alt="Special Photo 3">
-      </div>
-
-      <h2>May your smile never fade 🌸</h2>
-      <p>~Just like Krishna always protected Radha,  
-         I’ll always be with you 💕~<br><p style="margin-left:100px ;">-By Pratham</p></p>
-        
-    </div>
+    <p class="message">On this special day, I just want to say... You are the most beautiful part of my life 💫</p>
+    <button onclick="openOverlay()">Open Your Surprise 🎁</button>
+    <div class="small-note">Tip: Tap the heart inside to reveal your love letter ✨</div>
   </div>
 
-  <!-- Main music (Raabta) -->
-  <audio id="main-music" autoplay loop>
+  <div id="overlay" aria-hidden="true">
+    <button id="closeBtn" onclick="closeOverlay()">❌</button>
+
+    <div class="slideshow" aria-hidden="false">
+      <img src="assets/1.jpg" class="slide active" alt="photo 1">
+      <img src="assets/5.jpg" class="slide" alt="photo 2">
+      <img src="assets/3.jpg" class="slide" alt="photo 3">
+      <img src="assets/2.jpg" class="slide" alt="photo 3">
+      <img src="assets/4.jpg" class="slide" alt="photo 3">
+      <img src="assets/6.jpg" class="slide" alt="photo 3">
+    </div>
+
+    <div class="quote" id="quoteText">May your smile never fade 🌸</div>
+
+    <button id="heartButton" style="width:90%;max-width:380px;margin-top:8px;padding:14px;font-size:1.05rem;">
+      💖 Reveal Love Letter
+    </button>
+
+    <div class="love-letter" id="loveLetter">
+Just like Krishna always protected Radha, I’ll always be with you 💕
+Tane malya pachi mara jeevan ma ek navi roshni avi gayi ✨
+Tu mara mate ekdum khas chho, mara dil ni shanti ane khushi banine ❤️
+Hu hamesha tara sathe ubho rahis, sukh-dukh badha moment ma 🤝   
+Hu tane hamesha pyar karis, ane mara dil ma ekmatra tuj rehish 💞
+</div>
+  </div>
+
+  <audio id="main-music" loop>
     <source src="assets/rabta.mp3" type="audio/mpeg">
   </audio>
-
-  <!-- Background music (Perfect) -->
-  <audio id="bg-music" autoplay loop>
+  <!-- <audio id="bg-music" loop>
     <source src="assets/perfect.mp3" type="audio/mpeg">
-  </audio>
+  </audio> -->
 
-  <script src="script.js"></script>
+<!-- <script>
+(function(){
+  const overlay = document.getElementById('overlay');
+  const slides = document.querySelectorAll('.slide');
+  const quotes = [
+    "Tu mari zindagi no ek khoobsurat hisso cho ❤️",
+    "Mari duaon no ek khoobsurat jawaab ho 🌸",
+    "Mari muskaan ni wajah khali tu cho 💕",
+    "Jetlo bhi waqt tara sathe spend karu ee ocho lage ✨",
+    "You are my forever and always 💫",
+    "Happy Birthday Adhya💕❤️"
+  ];
+  let slideInterval, quoteInterval;
+
+  window.openOverlay = function(){
+    overlay.style.display = 'flex';
+    overlay.setAttribute('aria-hidden','false');
+
+    // play music after user gesture (mobile friendly)
+    try{
+      document.getElementById('main-music').volume = 0.1;
+      // document.getElementById('bg-music').volume = 0.2;
+      document.getElementById('main-music').play();
+      //document.getElementById('bg-music').play();
+    }catch(e){}
+
+    // start slideshow
+    let i = 0;
+    slideInterval = setInterval(()=>{
+      slides[i].classList.remove('active');
+      i = (i+1) % slides.length;
+      slides[i].classList.add('active');
+    }, 3000);
+
+    // start quotes
+    let q = 0;
+    document.getElementById('quoteText').textContent = quotes[0];
+    quoteInterval = setInterval(()=>{
+      q = (q+1) % quotes.length;
+      document.getElementById('quoteText').textContent = quotes[q];
+    }, 4000);
+
+    // small subtle vibration (if allowed) when opened
+    if(navigator.vibrate) navigator.vibrate(80);
+  };
+
+  window.closeOverlay = function(){
+    overlay.style.display = 'none';
+    overlay.setAttribute('aria-hidden','true');
+    clearInterval(slideInterval);
+    clearInterval(quoteInterval);
+    try{
+      document.getElementById('main-music').pause();
+      document.getElementById('bg-music').pause();
+    }catch(e){}
+  };
+
+  // Reveal letter with typing effect
+  document.getElementById('heartButton').addEventListener('click', function(){
+    const letter = document.getElementById('loveLetter');
+    if(letter.style.display === 'block') return;
+    letter.style.display = 'block';
+    const text = letter.textContent.trim();
+    letter.textContent = '';
+    let j = 0;
+    const t = setInterval(()=>{
+      if(j < text.length){
+        letter.textContent += text[j++];
+      } else {
+        clearInterval(t);
+      }
+    }, 28);
+
+    // small button pulse
+    this.animate([{transform:'scale(1)'},{transform:'scale(1.08)'},{transform:'scale(1)'}], {duration:420, iterations:1});
+
+    // gentle vibration if available
+    if(navigator.vibrate) navigator.vibrate([30,20,30]);
+  });
+
+  // close on ESC
+  document.addEventListener('keydown', e=>{
+    if(e.key === 'Escape') closeOverlay();
+  });
+
+  // prevent body scroll when overlay open (nice on some mobiles)
+  const observer = new MutationObserver(()=> {
+    if(overlay.style.display === 'flex') document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = '';
+  });
+  observer.observe(overlay, {attributes:true, attributeFilter:['style']});
+})();
+
+const text = letter.innerHTML.trim();
+letter.innerHTML = '';
+...
+letter.innerHTML += text[j++];
+
+</script> -->
+<script>
+(function(){
+  const overlay = document.getElementById('overlay');
+  const slides = document.querySelectorAll('.slide');
+  const quotes = [
+    "Tu mari zindagi no ek khoobsurat hisso cho ❤️",
+    "Mari duaon no ek khoobsurat jawaab ho 🌸",
+    "Mari muskaan ni wajah khali tu cho 💕",
+    "Jetlo bhi waqt tara sathe spend karu ee ocho lage ✨",
+    "You are my forever and always 💫",
+    "Happy Birthday Adhya💕❤️"
+  ];
+  let slideInterval, quoteInterval;
+
+  window.openOverlay = function(){
+    overlay.style.display = 'flex';
+    overlay.setAttribute('aria-hidden','false');
+
+    try{
+      document.getElementById('main-music').volume = 0.1;
+      document.getElementById('main-music').play();
+    }catch(e){}
+
+    let i = 0;
+    slideInterval = setInterval(()=>{
+      slides[i].classList.remove('active');
+      i = (i+1) % slides.length;
+      slides[i].classList.add('active');
+    }, 3000);
+
+    let q = 0;
+    document.getElementById('quoteText').textContent = quotes[0];
+    quoteInterval = setInterval(()=>{
+      q = (q+1) % quotes.length;
+      document.getElementById('quoteText').textContent = quotes[q];
+    }, 4000);
+
+    if(navigator.vibrate) navigator.vibrate(80);
+  };
+
+  window.closeOverlay = function(){
+    overlay.style.display = 'none';
+    overlay.setAttribute('aria-hidden','true');
+    clearInterval(slideInterval);
+    clearInterval(quoteInterval);
+    try{
+      document.getElementById('main-music').pause();
+      document.getElementById('bg-music')?.pause();
+    }catch(e){}
+  };
+
+  // Reveal letter with typing effect (with <br> support)
+  document.getElementById('heartButton').addEventListener('click', function(){
+    const letter = document.getElementById('loveLetter');
+    if(letter.style.display === 'block') return;
+
+    letter.style.display = 'block';
+    const text = letter.innerHTML.trim();  // preserve <br>
+    letter.innerHTML = '';
+    let j = 0;
+
+    const t = setInterval(()=>{
+      if(j < text.length){
+        letter.innerHTML += text[j++];
+      } else {
+        clearInterval(t);
+      }
+    }, 28);
+
+    this.animate(
+      [{transform:'scale(1)'},{transform:'scale(1.08)'},{transform:'scale(1)'}],
+      {duration:420, iterations:1}
+    );
+
+    if(navigator.vibrate) navigator.vibrate([30,20,30]);
+  });
+
+  document.addEventListener('keydown', e=>{
+    if(e.key === 'Escape') closeOverlay();
+  });
+
+  const observer = new MutationObserver(()=> {
+    if(overlay.style.display === 'flex') document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = '';
+  });
+  observer.observe(overlay, {attributes:true, attributeFilter:['style']});
+})();
+</script>
+
 </body>
 </html>
